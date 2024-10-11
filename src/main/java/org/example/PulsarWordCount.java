@@ -23,14 +23,22 @@ public class PulsarWordCount {
         PipelineOptions options = PipelineOptionsFactory.create();
         options.setRunner(DirectRunner.class);
         Pipeline pipeline = Pipeline.create(options);
-        String adminUrl = "http://localhost:8080";
-        String clientUrl = "pulsar://localhost:6650";
+        String adminUrl = "https://xxxx";
+        String clientUrl = "pulsar+ssl://xxxx:6651";
+
+        String path = PulsarWordCountAvro.class.getClassLoader().getResource("secret.json").getPath();
+        String authPlugin = "org.apache.pulsar.client.impl.auth.oauth2.AuthenticationOAuth2";
+        String authParams = "{\"privateKey\":\"file://" + path + "\","
+                + "\"issuerUrl\":\"xxxx\","
+                + "\"audience\":\"xxxx\"}";
 
         pipeline.apply(
                         "Read from Pulsar",
                         PulsarIO.<String>read()
                                 .withAdminUrl(adminUrl)
                                 .withClientUrl(clientUrl)
+                                .withAuthPlugin(authPlugin)
+                                .withAuthParameters(authParams)
                                 .withSchemaType(SchemaType.STRING)
                                 .withPojo(String.class)
                                 .withTopic("word-count"))
