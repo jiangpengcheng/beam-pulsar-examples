@@ -2,7 +2,6 @@ package org.example;
 
 import io.streamnative.beam.pulsar.PulsarIO;
 import io.streamnative.beam.pulsar.PulsarMessage;
-import org.apache.beam.runners.direct.DirectRunner;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
@@ -21,7 +20,6 @@ import org.joda.time.Duration;
 public class PulsarWordCount {
     public static void main(String[] args) {
         PipelineOptions options = PipelineOptionsFactory.create();
-        options.setRunner(DirectRunner.class);
         Pipeline pipeline = Pipeline.create(options);
         String adminUrl = "https://xxxx";
         String clientUrl = "pulsar+ssl://xxxx:6651";
